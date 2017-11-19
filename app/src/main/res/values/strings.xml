@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">JCalculator</string>
+    <string name="digit_only_can_input">.1234567890</string>
+    <!--<string name="digit_only_can_input">qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890</string>-->
 </resources>

@@ -2,7 +2,13 @@ package com.ianglei.jcalculator;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
+import android.text.method.KeyListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -18,12 +24,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View tableRow;
     private int num = 1;
 
+    EditText priceText;
+    EditText discountText;
+    EditText account;
+
     public String TAG = this.getClass().getSimpleName();
     private LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CrashHandler.getInstance().init(this);
         setContentView(R.layout.activity_main);
 
         containerView = (LinearLayout)findViewById(R.id.container);
@@ -63,14 +74,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void calc()
     {
         Log.d(TAG, "calc");
-        float total = 0;
+        double total = 0;
         for(int row = 0; row < containerView.getChildCount(); row++)
         {
             View rowView = containerView.getChildAt(row);
-            EditText priceText = (EditText)rowView.findViewById(R.id.price);
-            EditText discountText = (EditText)rowView.findViewById(R.id.discount);
-            EditText account = (EditText)rowView.findViewById(R.id.account);
-            PriceObj priceObj = new PriceObj(priceText.getText().toString(), discountText.getText().toString(), account.getText().toString());
+            priceText = (EditText)rowView.findViewById(R.id.price);
+            discountText = (EditText)rowView.findViewById(R.id.discount);
+            account = (EditText)rowView.findViewById(R.id.account);
+
+            PriceObj priceObj = new PriceObj(priceText.getText().toString(),
+                    discountText.getText().toString(), account.getText().toString());
             if(!priceObj.isLegal())
             {
                 Log.d(TAG, "Illegal param");

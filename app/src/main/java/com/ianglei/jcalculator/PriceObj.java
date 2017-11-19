@@ -2,6 +2,7 @@ package com.ianglei.jcalculator;
 
 import android.util.Log;
 
+import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,9 +66,19 @@ public class PriceObj {
         return discount != null && !discount.trim().equals("") && isMatch(DISCOUNT, discount);
     }
 
-    public float calc()
+    public double calc()
     {
-        Float result = (Float.valueOf(price)) * (Integer.valueOf(account)) * (Integer.valueOf(discount) / 100f);
+        BigDecimal priceDec = new BigDecimal(price);
+        BigDecimal accountDec = new BigDecimal(account);
+        BigDecimal discountDec = new BigDecimal(discount);
+        BigDecimal hundred = new BigDecimal(100);
+
+        double first = Arith.div(Double.valueOf(discount), 100, 2);
+        Log.d(TAG, "first: " + first);
+        double second = Arith.mul(Double.valueOf(price), Double.valueOf(account));
+        Log.d(TAG, "second: " + second);
+        double result = Arith.mul(first, second);
+        result = Arith.round(result, 2);
         Log.d(TAG, "total: " + result);
         return result;
     }
