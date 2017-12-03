@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout containerView;
@@ -28,6 +30,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText discountText;
     EditText account;
 
+    EditText price1;
+    EditText slot1;
+    EditText price2;
+    EditText slot2;
+
     public String TAG = this.getClass().getSimpleName();
     private LinearLayout linearLayout;
 
@@ -35,12 +42,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CrashHandler.getInstance().init(this);
-        setContentView(R.layout.activity_main);
 
-        containerView = (LinearLayout)findViewById(R.id.container);
-        findViewById(R.id.equal).setOnClickListener(this);
-        addRow();
+        try {
+            setContentView(R.layout.activity_main);
 
+            containerView = (LinearLayout) findViewById(R.id.container);
+            findViewById(R.id.equal).setOnClickListener(this);
+            addRow();
+            findViewById(R.id.compare).setOnClickListener(this);
+        }
+        catch (Exception e)
+        {
+            Log.d(TAG, e.toString());
+        }
     }
 
     @Override
@@ -56,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.equal:
                 calc();
+                break;
+            case R.id.compare:
+                compare();
                 break;
         }
     }
@@ -98,5 +115,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         TextView totalText = (TextView)findViewById(R.id.total);
         totalText.setText(String.valueOf(total));
+    }
+
+    private void compare()
+    {
+        price1 = (EditText)findViewById(R.id.compareprice1);
+        slot1 = (EditText)findViewById(R.id.compareslot1);
+        price2 = (EditText)findViewById(R.id.compareprice2);
+        slot2 = (EditText)findViewById(R.id.compareslot2);
+
+        String sPrice1 = price1.getText().toString();
+        String sSlot1 = slot1.getText().toString();
+        String sPrice2 = price2.getText().toString();
+        String sSlot2 = slot2.getText().toString();
+
+        if(sPrice1 == "" || sSlot1 == "" || sPrice2 == "" || sSlot2 == "")
+        {
+            Toast.makeText(this,"不输入吗？",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            findViewById(R.id.win2).setVisibility(View.INVISIBLE);
+            findViewById(R.id.win1).setVisibility(View.INVISIBLE);
+
+            double first = Arith.div(Double.valueOf(sPrice1), Double.valueOf(sSlot1), 10);
+            double second = Arith.div(Double.valueOf(sPrice2), Double.valueOf(sSlot2), 10);
+            Log.d(TAG, "first: " + first + " second: " +second);
+
+            if(first > second)
+            {
+                findViewById(R.id.win2).setVisibility(View.VISIBLE);
+            }
+            else{
+                findViewById(R.id.win1).setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

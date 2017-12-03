@@ -67,6 +67,12 @@
                 android:textSize="26sp"
                 android:layout_weight="1"/>
         </LinearLayout>
+
+        
+
+        <include layout="@layout/compare_item"/>
+
     </LinearLayout>
+
 
 </ScrollView>
